@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="لوحة الإدارة">
+    <title>لوحة الإدارة</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-logo">لوحة الإدارة</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="sidebar-link active" data-section="dashboard">
+                    <span class="sidebar-icon">📊</span>
+                    <span>لوحة المعلومات</span>
+                </a>
+                <a href="#merchants" class="sidebar-link" data-section="merchants">
+                    <span class="sidebar-icon">👥</span>
+                    <span>التجار</span>
+                </a>
+                <a href="#notifications" class="sidebar-link" data-section="notifications">
+                    <span class="sidebar-icon">📢</span>
+                    <span>إرسال إشعارات</span>
+                </a>
+                <a href="#logs" class="sidebar-link" data-section="logs">
+                    <span class="sidebar-icon">📋</span>
+                    <span>سجل الأحداث</span>
+                </a>
+                <a href="#" class="sidebar-link" id="adminLogoutBtn">
+                    <span class="sidebar-icon">🚪</span>
+                    <span>تسجيل الخروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <!-- Top Bar -->
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" id="adminMenuToggle">☰</button>
+                    <h1 class="topbar-title">مرحبًا، المدير</h1>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <main class="admin-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <h2 class="section-title">نظرة عامة</h2>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">👥</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="totalMerchants">0</h3>
+                                <p class="stat-label">إجمالي التجار</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🛒</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="todayOrders">0</h3>
+                                <p class="stat-label">طلبات اليوم</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">⚠️</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="alerts">0</h3>
+                                <p class="stat-label">تنبيهات</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Merchants Section -->
+                <section id="merchants" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">إدارة التجار</h2>
+                        <div class="search-box">
+                            <input type="text" id="merchantSearch" class="form-input" placeholder="بحث عن تاجر...">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="merchantsContainer"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notifications Section -->
+                <section id="notifications" class="content-section">
+                    <h2 class="section-title">إرسال إشعارات</h2>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="notificationForm">
+                                <div class="form-group">
+                                    <label for="notifTitle" class="form-label required">عنوان الإشعار</label>
+                                    <input type="text" id="notifTitle" class="form-input" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="notifBody" class="form-label required">نص الإشعار</label>
+                                    <textarea id="notifBody" class="form-textarea" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label required">المستهدفون</label>
+                                    <div class="form-check">
+                                        <input type="radio" id="targetAll" name="target" value="all"
+                                            class="form-check-input" checked>
+                                        <label for="targetAll" class="form-check-label">جميع التجار</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" id="targetSingle" name="target" value="single"
+                                            class="form-check-input">
+                                        <label for="targetSingle" class="form-check-label">تاجر محدد</label>
+                                    </div>
+                                </div>
+
+                                <div id="singleMerchantSelect" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="merchantId" class="form-label">اختر التاجر</label>
+                                        <select id="merchantId" class="form-select">
+                                            <option value="">اختر...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" id="sendNotifBtn">إرسال الإشعار</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Logs Section -->
+                <section id="logs" class="content-section">
+                    <h2 class="section-title">سجل الأحداث</h2>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="logsContainer"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Impersonate Modal -->
+    <div id="impersonateModal" class="modal">
+        <div class="modal-content" style="max-width: 1000px;">
+            <div class="modal-header">
+                <h3 class="modal-title">عرض لوحة التاجر (للقراءة فقط)</h3>
+                <button type="button" class="modal-close" onclick="closeModal('impersonateModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="impersonateContent" style="max-height: 70vh; overflow-y: auto;">
+                    <!-- Merchant dashboard preview will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

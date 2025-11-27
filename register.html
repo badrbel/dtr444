@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="تسجيل تاجر جديد - منصة التجارة الإلكترونية">
+    <title>تسجيل تاجر جديد</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Header -->
+            <div class="auth-header">
+                <h1 class="auth-title">إنشاء حساب تاجر</h1>
+                <p class="auth-subtitle">أنشئ متجرك الإلكتروني في دقائق</p>
+            </div>
+
+            <!-- Registration Form -->
+            <form id="registerForm" class="auth-form">
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label for="name" class="form-label required">الاسم الكامل</label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="أدخل اسمك الكامل" required>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" class="form-label required">البريد الإلكتروني</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="example@email.com"
+                        required>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label for="phone" class="form-label required">رقم الهاتف</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="0555123456" required>
+                    <span class="form-help">مثال: 0555123456</span>
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="username" class="form-label required">اسم المستخدم (رابط المتجر)</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="اسم-متجرك"
+                        required>
+                    <span class="form-help">سيكون رابط متجرك: yourdomain.com/store/<span
+                            id="usernamePreview">اسم-متجرك</span></span>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password" class="form-label required">كلمة المرور</label>
+                    <input type="password" id="password" name="password" class="form-input"
+                        placeholder="أدخل كلمة المرور" required>
+                    <span class="form-help">يجب أن تحتوي على 8 أحرف على الأقل</span>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label required">تأكيد كلمة المرور</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
+                        placeholder="أعد إدخال كلمة المرور" required>
+                </div>
+
+                <!-- Terms Checkbox -->
+                <div class="form-check">
+                    <input type="checkbox" id="terms" name="terms" class="form-check-input" required>
+                    <label for="terms" class="form-check-label">
+                        أوافق على <a href="policy.html" target="_blank">شروط الاستخدام وسياسة الخصوصية</a>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-block btn-lg">
+                    إنشاء حساب
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="auth-footer">
+                <p>لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a></p>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="auth-back">
+            <a href="index.html">← العودة للصفحة الرئيسية</a>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Redirect if already authenticated
+        redirectIfAuthenticated();
+
+        // Username preview
+        const usernameInput = document.getElementById('username');
+        const usernamePreview = document.getElementById('usernamePreview');
+
+        usernameInput.addEventListener('input', () => {
+            const value = usernameInput.value.trim();
+            usernamePreview.textContent = value || 'اسم-متجرك';
+        });
+
+        // Form validation and submission
+        const form = document.getElementById('registerForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear previous errors
+            clearAllErrors('registerForm');
+
+            // Get form data
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get('name').trim(),
+                email: formData.get('email').trim(),
+                phone: formData.get('phone').trim(),
+                username: formData.get('username').trim(),
+                password: formData.get('password'),
+                confirmPassword: formData.get('confirmPassword'),
+            };
+
+            // Validation
+            let hasError = false;
+
+            if (!data.name) {
+                showFieldError('name', 'الاسم الكامل مطلوب');
+                hasError = true;
+            }
+
+            if (!validateEmail(data.email)) {
+                showFieldError('email', 'البريد الإلكتروني غير صحيح');
+                hasError = true;
+            }
+
+            if (!validatePhone(data.phone)) {
+                showFieldError('phone', 'رقم الهاتف غير صحيح (مثال: 0555123456)');
+                hasError = true;
+            }
+
+            if (!validateUsername(data.username)) {
+                showFieldError('username', 'اسم المستخدم يجب أن يحتوي على أحرف وأرقام فقط (3 أحرف على الأقل)');
+                hasError = true;
+            }
+
+            if (!validatePassword(data.password)) {
+                showFieldError('password', 'كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل');
+                hasError = true;
+            }
+
+            if (data.password !== data.confirmPassword) {
+                showFieldError('confirmPassword', 'كلمة المرور غير متطابقة');
+                hasError = true;
+            }
+
+            if (!formData.get('terms')) {
+                showToast('يجب الموافقة على شروط الاستخدام للمتابعة', 'error');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Submit to API
+            setButtonLoading('submitBtn', true);
+
+            try {
+                const response = await authAPI.register({
+                    name: data.name,
+                    email: data.email,
+                    phone: data.phone,
+                    username: data.username,
+                    password: data.password,
+                });
+
+                // Save auth data
+                if (response.token) {
+                    saveAuthData(response.token, data.username, response.merchant);
+                }
+
+                showToast('تم إنشاء الحساب بنجاح!', 'success');
+
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = `dashboard.html?username=${data.username}`;
+                }, 1000);
+
+            } catch (error) {
+                console.error('Registration error:', error);
+
+                // Handle specific errors
+                if (error.data && error.data.field) {
+                    showFieldError(error.data.field, error.message);
+                } else {
+                    showToast(error.message || 'حدث خطأ أثناء التسجيل', 'error');
+                }
+
+                setButtonLoading('submitBtn', false);
+            }
+        });
+
+        // Real-time validation
+        document.getElementById('email').addEventListener('blur', function () {
+            if (this.value && !validateEmail(this.value)) {
+                showFieldError('email', 'البريد الإلكتروني غير صحيح');
+            } else {
+                clearFieldError('email');
+            }
+        });
+
+        document.getElementById('phone').addEventListener('blur', function () {
+            if (this.value && !validatePhone(this.value)) {
+                showFieldError('phone', 'رقم الهاتف غير صحيح');
+            } else {
+                clearFieldError('phone');
+            }
+        });
+
+        document.getElementById('username').addEventListener('blur', function () {
+            if (this.value && !validateUsername(this.value)) {
+                showFieldError('username', 'اسم المستخدم غير صحيح');
+            } else {
+                clearFieldError('username');
+            }
+        });
+
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            const password = document.getElementById('password').value;
+            if (this.value && this.value !== password) {
+                showFieldError('confirmPassword', 'كلمة المرور غير متطابقة');
+            } else {
+                clearFieldError('confirmPassword');
+            }
+        });
+    </script>
+</body>
+
+</html>

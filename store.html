@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="متجر إلكتروني">
+    <title id="storeTitle">المتجر</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/store.css">
+</head>
+
+<body>
+    <!-- Store Header -->
+    <header class="store-header">
+        <div class="container">
+            <div class="store-branding">
+                <img id="storeLogo" src="" alt="شعار المتجر" class="store-logo" style="display: none;">
+                <h1 id="storeName" class="store-name">المتجر</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Products Section -->
+    <main class="store-main">
+        <div class="container">
+            <div id="productsContainer" class="products-container">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="store-footer">
+        <div class="container">
+            <div class="footer-content">
+                <a href="policy.html" class="footer-link">سياسة الاستخدام</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">إتمام الطلب</h3>
+                <button type="button" class="modal-close" onclick="closeModal('orderModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Selected Product Info -->
+                <div id="selectedProductInfo" class="selected-product"></div>
+
+                <!-- Order Form -->
+                <form id="orderForm">
+                    <input type="hidden" id="selectedProductId">
+
+                    <div class="form-group">
+                        <label for="customerName" class="form-label required">الاسم الكامل</label>
+                        <input type="text" id="customerName" class="form-input" placeholder="أدخل اسمك الكامل" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerPhone" class="form-label required">رقم الهاتف</label>
+                        <input type="tel" id="customerPhone" class="form-input" placeholder="0555123456" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerAddress" class="form-label required">العنوان</label>
+                        <textarea id="customerAddress" class="form-textarea" placeholder="أدخل عنوانك الكامل"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity" class="form-label required">الكمية</label>
+                        <input type="number" id="quantity" class="form-input" value="1" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes" class="form-label">ملاحظات إضافية</label>
+                        <textarea id="notes" class="form-textarea" placeholder="أي ملاحظات أو طلبات خاصة"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('orderModal')">إلغاء</button>
+                <button type="button" class="btn btn-primary" id="submitOrderBtn">إرسال الطلب</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/store.js"></script>
+</body>
+
+</html>

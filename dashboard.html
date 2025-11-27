@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="لوحة تحكم التاجر">
+    <title>لوحة التحكم</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-logo">منصة التجار</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#overview" class="sidebar-link active" data-section="overview">
+                    <span class="sidebar-icon">📊</span>
+                    <span>لوحة المعلومات</span>
+                </a>
+                <a href="#products" class="sidebar-link" data-section="products">
+                    <span class="sidebar-icon">📦</span>
+                    <span>المنتجات</span>
+                </a>
+                <a href="#orders" class="sidebar-link" data-section="orders">
+                    <span class="sidebar-icon">🛒</span>
+                    <span>الطلبات</span>
+                </a>
+                <a href="#settings" class="sidebar-link" data-section="settings">
+                    <span class="sidebar-icon">⚙️</span>
+                    <span>الإعدادات</span>
+                </a>
+                <a href="#notifications" class="sidebar-link" data-section="notifications">
+                    <span class="sidebar-icon">🔔</span>
+                    <span>الإشعارات</span>
+                    <span class="badge badge-danger" id="notificationBadge" style="display: none;">0</span>
+                </a>
+                <a href="#" class="sidebar-link" id="logoutBtn">
+                    <span class="sidebar-icon">🚪</span>
+                    <span>تسجيل الخروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">مرحبًا، <span id="merchantName">التاجر</span></h1>
+                </div>
+                <div class="topbar-right">
+                    <button class="btn btn-primary" id="copyStoreLinkBtn">
+                        <span>📋</span>
+                        رابط متجري
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <main class="content">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <h2 class="section-title">نظرة عامة</h2>
+
+                    <!-- Statistics Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📊</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="todayOrders">0</h3>
+                                <p class="stat-label">طلبات اليوم</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">💰</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="totalSales">0 دج</h3>
+                                <p class="stat-label">إجمالي المبيعات</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">⏳</div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="pendingOrders">0</h3>
+                                <p class="stat-label">طلبات معلقة</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h3 class="card-title">الطلبات الأخيرة</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentOrdersContainer"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Products Section -->
+                <section id="products" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">إدارة المنتجات</h2>
+                        <button class="btn btn-primary" id="addProductBtn">+ إضافة منتج</button>
+                    </div>
+
+                    <div id="productsContainer"></div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders" class="content-section">
+                    <h2 class="section-title">إدارة الطلبات</h2>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="ordersContainer"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="content-section">
+                    <h2 class="section-title">الإعدادات</h2>
+
+                    <!-- Profile Settings -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title">معلومات الملف الشخصي</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="profileForm">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="profileName" class="form-label">الاسم</label>
+                                            <input type="text" id="profileName" class="form-input">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="profileEmail" class="form-label">البريد الإلكتروني</label>
+                                            <input type="email" id="profileEmail" class="form-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profilePhone" class="form-label">رقم الهاتف</label>
+                                    <input type="tel" id="profilePhone" class="form-input">
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="saveProfileBtn">حفظ التغييرات</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Payment Settings -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">إعدادات الدفع</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="paymentForm">
+                                <div class="form-group">
+                                    <label class="form-label">طريقة الدفع</label>
+                                    <div class="form-check">
+                                        <input type="radio" id="paymentCOD" name="paymentMethod" value="COD"
+                                            class="form-check-input">
+                                        <label for="paymentCOD" class="form-check-label">الدفع عند الاستلام
+                                            (COD)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" id="paymentContact" name="paymentMethod" value="CONTACT"
+                                            class="form-check-input">
+                                        <label for="paymentContact" class="form-check-label">التواصل عبر وسائل
+                                            التواصل</label>
+                                    </div>
+                                </div>
+
+                                <!-- COD Confirmation Method -->
+                                <div id="codOptions" style="display: none;">
+                                    <div class="form-group">
+                                        <label class="form-label">طريقة تأكيد الطلب</label>
+                                        <div class="form-check">
+                                            <input type="radio" id="confirmCall" name="confirmMethod" value="call"
+                                                class="form-check-input">
+                                            <label for="confirmCall" class="form-check-label">اتصال هاتفي</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" id="confirmWhatsapp" name="confirmMethod"
+                                                value="whatsapp" class="form-check-input">
+                                            <label for="confirmWhatsapp" class="form-check-label">واتساب</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Contact Links -->
+                                <div id="contactOptions" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="whatsappLink" class="form-label">رابط واتساب</label>
+                                        <input type="text" id="whatsappLink" class="form-input"
+                                            placeholder="https://wa.me/213555123456">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="instagramLink" class="form-label">رابط إنستغرام</label>
+                                        <input type="text" id="instagramLink" class="form-input"
+                                            placeholder="https://instagram.com/username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="facebookLink" class="form-label">رابط فيسبوك</label>
+                                        <input type="text" id="facebookLink" class="form-input"
+                                            placeholder="https://facebook.com/username">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" id="savePaymentBtn">حفظ الإعدادات</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notifications Section -->
+                <section id="notifications" class="content-section">
+                    <h2 class="section-title">الإشعارات</h2>
+
+                    <div id="notificationsContainer"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="productModalTitle">إضافة منتج</h3>
+                <button type="button" class="modal-close" onclick="closeModal('productModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    <div class="form-group">
+                        <label for="productTitle" class="form-label required">اسم المنتج</label>
+                        <input type="text" id="productTitle" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription" class="form-label">الوصف</label>
+                        <textarea id="productDescription" class="form-textarea"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="productPrice" class="form-label required">السعر (دج)</label>
+                                <input type="number" id="productPrice" class="form-input" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="productStock" class="form-label">المخزون</label>
+                                <input type="number" id="productStock" class="form-input" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="productImage" class="form-label">صورة المنتج</label>
+                        <input type="file" id="productImage" class="form-input" accept="image/*">
+                        <img id="productImagePreview"
+                            style="display: none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('productModal')">إلغاء</button>
+                <button type="button" class="btn btn-primary" id="saveProductBtn">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
